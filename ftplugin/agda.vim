@@ -15,7 +15,7 @@ function! Load(quiet)
     " Do nothing.  Overidden below with a Python function if python is supported.
 endfunction
 
-au QuickfixCmdPost make call ReloadSyntax()|call AgdaVersion(1)|call Load(1)
+au QuickfixCmdPost make call ReloadSyntax()|call AgdaVersion(1)|call Load(0)
 set autowrite
 
 if exists("g:agda_extraincpaths")
