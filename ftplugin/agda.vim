@@ -491,6 +491,7 @@ nnoremap <buffer> <LocalLeader>N :call Normalize("True")<CR>
 nnoremap <buffer> <LocalLeader>M :call ShowModule('')<CR>
 nnoremap <buffer> <LocalLeader>y :call WhyInScope('')<CR>
 nnoremap <buffer> <LocalLeader>m :Metas<CR>
+nnoremap <buffer> <LocalLeader>A :call Load(0)<CR>:call Refine("False")<CR>:call Auto()<CR>
 
 " Show/reload metas
 nnoremap <buffer> <C-e> :Metas<CR>
