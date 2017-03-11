@@ -208,6 +208,7 @@ def parseVersion(versionString):
     agdaVersion = [int(c) for c in versionString[12:].split('.')]
 
 def interpretResponse(responses, quiet = False):
+    #print(responses)
     for response in responses:
         if response.startswith('(agda2-info-action '):
             if quiet and '*Error*' in response: vim.command('cwindow')
@@ -251,6 +252,12 @@ def sendCommand(arg, quiet=False):
     # The x is a really hacky way of getting a consistent final response.  Namely, "cannot read"
     agda.stdin.write('IOTCM "%s" None Indirect (%s)\nx\n' % (escape(f), arg))
     interpretResponse(getOutput(), quiet)
+
+def sendCommand2(arg):
+    vim.command(':silent! write')
+    f = vim.current.buffer.name
+    agda.stdin.write('IOTCM "%s" None Indirect (%s)\nx\n' % (escape(f), arg))
+    interpretResponse(getOutput(), False)
 
 def sendCommandLoad(file, quiet):
     global agdaVersion
@@ -412,13 +419,17 @@ endfunction
 function! Normalize(unfoldAbstract)
 exec s:python_until_eof
 import vim
-result = getHoleBodyAtCursor()
-if result is None:
-    sendCommand('Cmd_compute_toplevel %s "%s"' % (vim.eval('a:unfoldAbstract'), escape(promptUser("Enter expression: "))))
-elif result[1] is None:
-    print("Goal not loaded")
-else:
-    sendCommand('Cmd_compute %s %d noRange "%s"' % (vim.eval('a:unfoldAbstract'), result[1], escape(result[0])))
+
+command = 'Cmd_compute_toplevel DefaultCompute \"%s\"' % escape(promptUser("Enter expression: ")) 
+sendCommand2(command)
+
+#result = getHoleBodyAtCursor()
+#if result is None:
+#    sendCommand('Cmd_compute_toplevel %s "%s"' % (vim.eval('a:unfoldAbstract'), escape(promptUser("Enter expression: "))))
+#elif result[1] is None:
+#    print("Goal not loaded")
+#else:
+#    sendCommand('Cmd_compute %s %d noRange "%s"' % (vim.eval('a:unfoldAbstract'), result[1], escape(result[0])))
 EOF
 endfunction
 
